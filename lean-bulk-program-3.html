@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lean Bulk — 6-Day Push/Pull Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f5f2ed;
+  --surface:  #fffefb;
+  --dark:     #1a1a18;
+  --mid:      #3d3d38;
+  --muted:    #8c8b83;
+  --border:   #e0ddd5;
+  --push:     #c94b2a;
+  --pull:     #1f6fb5;
+  --leg:      #2a8c4a;
+  --rest:     #7a6e5f;
+  --accent:   #c94b2a;
+  --yellow:   #e8b84b;
+  --nav-bg:   #1a1a18;
+  --nav-border: rgba(255,255,255,0.07);
+  --nav-btn:  rgba(255,255,255,0.35);
+  --nav-hover: rgba(255,255,255,0.7);
+  --hero-bg:  #1a1a18;
+  --table-stripe: rgba(0,0,0,0.025);
+  --table-hover:  rgba(0,0,0,0.02);
+  --toggle-bg: rgba(255,255,255,0.1);
+  --transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+html.dark {
+  --bg:       #0f0f0e;
+  --surface:  #1a1a18;
+  --dark:     #f0ede8;
+  --mid:      #c8c4bc;
+  --muted:    #6b6a63;
+  --border:   #2e2d29;
+  --push:     #e05c38;
+  --pull:     #4a9fd4;
+  --leg:      #3db562;
+  --nav-bg:   #111110;
+  --nav-border: rgba(255,255,255,0.06);
+  --nav-btn:  rgba(255,255,255,0.28);
+  --nav-hover: rgba(255,255,255,0.65);
+  --hero-bg:  #0a0a09;
+  --table-stripe: rgba(255,255,255,0.02);
+  --table-hover:  rgba(255,255,255,0.03);
+  --toggle-bg: rgba(255,255,255,0.08);
+}
+
+/* ── THEME TOGGLE ─────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 8px 16px 8px 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  transition: var(--transition), box-shadow 0.2s, transform 0.15s;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--mid);
+  user-select: none;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.theme-toggle:active { transform: translateY(0); }
+
+.toggle-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--toggle-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+
+.theme-toggle:hover .toggle-icon { transform: rotate(20deg); }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--dark);
+  font-family: 'Syne', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: var(--transition);
+}
+
+/* ── HERO ─────────────────────────────────────── */
+.hero {
+  background: var(--hero-bg);
+  padding: 64px 48px 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grain {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.hero-bg-text {
+  position: absolute;
+  right: -40px; bottom: -60px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 320px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.025);
+  line-height: 1;
+  letter-spacing: -10px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--push);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-label::before { content:''; width:32px; height:1px; background:var(--push); }
+
+.hero h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(56px, 10vw, 120px);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -1px;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.hero h1 em { color: var(--push); font-style: normal; }
+
+.hero-chips {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 1px;
+}
+
+.chip b { color: rgba(255,255,255,0.9); font-weight: 500; }
+
+/* ── NAV ──────────────────────────────────────── */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 48px;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  padding: 15px 22px;
+  background: none; border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--nav-btn);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+  position: relative;
+}
+.tab-btn:hover { color: var(--nav-hover); }
+.tab-btn.active-push  { color: var(--push);  border-bottom-color: var(--push); }
+.tab-btn.active-pull  { color: var(--pull);  border-bottom-color: var(--pull); }
+.tab-btn.active-leg   { color: var(--leg);   border-bottom-color: var(--leg); }
+.tab-btn.active-rest  { color: var(--yellow);border-bottom-color: var(--yellow); }
+
+/* ── LAYOUT ───────────────────────────────────── */
+.container { max-width: 1080px; margin: 0 auto; padding: 48px 48px; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── DAY HEADER ───────────────────────────────── */
+.day-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+}
+
+.day-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.day-title-wrap h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.5px;
+}
+
+.day-type {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.type-push { background: rgba(201,75,42,.12); color: var(--push); border: 1px solid rgba(201,75,42,.25); }
+.type-pull { background: rgba(31,111,181,.12); color: var(--pull); border: 1px solid rgba(31,111,181,.25); }
+.type-leg  { background: rgba(42,140,74,.12);  color: var(--leg);  border: 1px solid rgba(42,140,74,.25); }
+.type-rest { background: rgba(232,184,75,.1);  color: #a07e2b;     border: 1px solid rgba(232,184,75,.25); }
+
+.day-meta { text-align: right; }
+.day-focus-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 2px;
+  color: var(--muted); text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.day-muscles {
+  font-size: 14px; font-weight: 600; color: var(--dark); line-height: 1.4;
+}
+
+/* ── INFO CARDS ───────────────────────────────── */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px 20px;
+}
+
+.card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.card p { font-size: 13px; color: var(--mid); line-height: 1.6; }
+
+.card ul { list-style: none; }
+.card li {
+  font-size: 13px; color: var(--mid);
+  padding: 3px 0;
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.card li::before { content: '·'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 0px; font-size: 16px; line-height: 1; }
+
+/* ── EXERCISE TABLE ───────────────────────────── */
+.section-heading {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-heading::after { content:''; flex:1; height:1px; background:var(--border); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 36px;
+}
+
+thead th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--table-stripe);
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background .12s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--table-hover); }
+
+tbody td {
+  padding: 14px 14px;
+  vertical-align: top;
+}
+
+.ex-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  width: 28px;
+}
+
+.ex-name { font-weight: 700; font-size: 14px; line-height: 1.2; }
+.ex-note {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 4px;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.ex-sets {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tag-push { color: var(--push); }
+.tag-pull { color: var(--pull); }
+.tag-leg  { color: var(--leg); }
+
+.ex-muscle-primary { font-size: 13px; font-weight: 600; }
+.ex-muscle-secondary { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'JetBrains Mono', monospace; letter-spacing: .5px; }
+
+.ex-rest {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── SCHEDULE TABLE ───────────────────────────── */
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 48px;
+}
+
+.schedule-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 10px 16px;
+  background: var(--table-stripe);
+  border-bottom: 2px solid var(--border);
+}
+
+.schedule-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.day-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sched-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.sb-push { background: rgba(201,75,42,.1); color: var(--push); }
+.sb-pull { background: rgba(31,111,181,.1); color: var(--pull); }
+.sb-leg  { background: rgba(42,140,74,.1);  color: var(--leg); }
+.sb-rest { background: rgba(122,110,95,.1); color: var(--rest); }
+
+/* ── MACRO CARDS ──────────────────────────────── */
+.macro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.macro-card {
+  background: var(--dark);
+  border-radius: 6px;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.macro-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.macro-unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+}
+
+/* ── PROGRESSION ──────────────────────────────── */
+.prog-list { list-style: none; padding: 0; }
+
+.prog-item {
+  display: flex; gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+
+.prog-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--border);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: right;
+}
+
+.prog-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.prog-desc  { font-size: 13px; color: var(--mid); line-height: 1.6; }
+
+/* ── REST DAY ─────────────────────────────────── */
+.rest-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 48px;
+  text-align: center;
+}
+
+.rest-icon { font-size: 48px; margin-bottom: 20px; }
+
+.rest-panel h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.rest-panel p { font-size: 14px; color: var(--muted); max-width: 400px; margin: 0 auto 16px; line-height: 1.6; }
+
+/* ── PANEL TITLE ──────────────────────────────── */
+.panel-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  margin-bottom: 24px;
+  line-height: 1;
+}
+
+/* ── MUSCLE COVERAGE PILLS ────────────────────── */
+.coverage-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 36px;
+}
+
+.muscle-pill {
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--mid);
+  display: flex; align-items: center; gap: 5px;
+}
+
+.muscle-pill .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--leg);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .hero, .container { padding: 28px 20px; }
+  .tab-nav { padding: 0 20px; }
+  .tab-btn { padding: 13px 14px; font-size: 10px; }
+  .day-header { flex-direction: column; align-items: flex-start; }
+  .day-meta { text-align: left; }
+  thead th:nth-child(5), tbody td:nth-child(5) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══════════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-grain"></div>
+  <div class="hero-bg-text">BULK</div>
+  <div class="hero-label">6-Day Training Program</div>
+  <h1>Lean<br><em>Bulk</em><br>Push/Pull</h1>
+  <div class="hero-chips">
+    <span class="chip">Age <b>18–19</b></span>
+    <span class="chip">Height <b>175 cm</b></span>
+    <span class="chip">Weight <b>60 kg</b></span>
+    <span class="chip">Level <b>Beg → Int</b></span>
+    <span class="chip">Goal <b>Lean Bulk</b></span>
+    <span class="chip">Days <b>6 / week</b></span>
+  </div>
+</header>
+
+<!-- ═══ NAV ════════════════════════════════════════════ -->
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn" data-tab="day1" data-color="push" onclick="go('day1','push',this)">Day 1 — Push A</button>
+  <button class="tab-btn" data-tab="day2" data-color="pull" onclick="go('day2','pull',this)">Day 2 — Pull A</button>
+  <button class="tab-btn" data-tab="day3" data-color="leg"  onclick="go('day3','leg', this)">Day 3 — Legs</button>
+  <button class="tab-btn" data-tab="day4" data-color="push" onclick="go('day4','push',this)">Day 4 — Push B</button>
+  <button class="tab-btn" data-tab="day5" data-color="pull" onclick="go('day5','pull',this)">Day 5 — Pull B</button>
+  <button class="tab-btn" data-tab="day6" data-color="rest" onclick="go('day6','rest',this)">Day 6 — Rest</button>
+  <button class="tab-btn" data-tab="guide" data-color="rest" onclick="go('guide','rest',this)">Guide + Diet</button>
+</nav>
+
+<div class="container">
+
+<!-- ════════════════════════════════════════════════════
+     DAY 1 — PUSH A (HEAVY)
+════════════════════════════════════════════════════ -->
+<section id="day1" class="tab-panel active">
+
+  <div class="day-header">
+    <div class="day-title-wrap">
+      <div class="day-num">Day 01 · Monday</div>
+      <h2>Push A<br><span style="color:var(--push)">Heavy</span></h2>
+      <div class="day-type type-push">⚡ Strength Focus</div>
+    </div>
+    <div class="day-meta">
+      <div class="day-focus-label">Primary Muscles</div>
+      <div class="day-muscles">Chest (mid + upper)<br>Front Delts · Triceps</div>
+    </div>
+  </div>
+
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">🎯 Session Goal</div>
+      <p>Build raw pressing strength. Keep reps low (4–6), load heavy, rest fully. Every set should feel challenging but form must stay clean.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">⏱ Rest Guidance</div>
+      <ul>
+        <li>Compound exercises — <b>2.5–3 min</b></li>
+        <li>Accessories — <b>90 sec</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">🛡 Injury Prevention</div>
+      <p>Never skip your warm-up sets. Do 2 light sets (50–60% load) before your first working set on Bench and OHP.</p>
+    </div>
+  </div>
+
+  <div class="section-heading">Main Lifts</div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">01</td>
+        <td>
+          <div class="ex-name">Flat Barbell Bench Press</div>
+          <div class="ex-note">Retract scapula, bar touches lower chest, feet flat on floor. Drive the bar in a slight arc.</div>
+        </td>
+        <td class="ex-sets tag-push">4 × 4–6</td>
+        <td>
+          <div class="ex-muscle-primary">Mid Chest</div>
+          <div class="ex-muscle-secondary">Front Delts, Triceps</div>
+        </td>
+        <td class="ex-rest">3 min</td>
+      </tr>
+      <tr>
+        <td class="ex-num">02</td>
+        <td>
+          <div class="ex-name">Barbell Overhead Press (OHP)</div>
+          <div class="ex-note">Brace core, elbows slightly forward, press in a vertical path. Don't lean back excessively.</div>
+        </td>
+        <td class="ex-sets tag-push">4 × 4–6</td>
+        <td>
+          <div class="ex-muscle-primary">Front + Lateral Delts</div>
+          <div class="ex-muscle-secondary">Upper Traps, Triceps</div>
+        </td>
+        <td class="ex-rest">3 min</td>
+      </tr>
+      <tr>
+        <td class="ex-num">03</td>
+        <td>
+          <div class="ex-name">Incline Dumbbell Press</div>
+          <div class="ex-note">Set bench to 30–40°. Keep elbows at ~45° to body. Full stretch at bottom.</div>
+        </td>
+        <td class="ex-sets tag-push">3 × 6–8</td>
+        <td>
+          <div class="ex-muscle-primary">Upper Chest</div>
+          <div class="ex-muscle-secondary">Front Delts, Triceps</div>
+        </td>
+        <td class="ex-rest">2 min</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-heading">Accessories</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">04</td>
+        <td>
+          <div class="ex-name">Lateral Raises (Dumbbell)</div>
+          <div class="ex-note">Slight elbow bend, lead with elbows not wrists. Stop at shoulder height.</div>
+        </td>
+        <td class="ex-sets tag-push">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Lateral Delts</div>
+          <div class="ex-muscle-secondary">—</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">05</td>
+        <td>
+          <div class="ex-name">Cable Tricep Pushdown (Rope)</div>
+          <div class="ex-note">Keep elbows locked at sides. Spread rope at bottom for full contraction.</div>
+        </td>
+        <td class="ex-sets tag-push">3 × 10–12</td>
+        <td>
+          <div class="ex-muscle-primary">Triceps (all heads)</div>
+          <div class="ex-muscle-secondary">—</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">06</td>
+        <td>
+          <div class="ex-name">Ab Wheel Rollout / Plank</div>
+          <div class="ex-note">Keep lower back flat. Don't let hips sag. Rollout = hinge at hips only.</div>
+        </td>
+        <td class="ex-sets">3 × 10–12 / 30 s</td>
+        <td>
+          <div class="ex-muscle-primary">Core (abs, obliques)</div>
+          <div class="ex-muscle-secondary">Lower Back stability</div>
+        </td>
+        <td class="ex-rest">60 sec</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     DAY 2 — PULL A (HEAVY)
+════════════════════════════════════════════════════ -->
+<section id="day2" class="tab-panel">
+
+  <div class="day-header">
+    <div class="day-title-wrap">
+      <div class="day-num">Day 02 · Tuesday</div>
+      <h2>Pull A<br><span style="color:var(--pull)">Heavy</span></h2>
+      <div class="day-type type-pull">⚡ Strength Focus</div>
+    </div>
+    <div class="day-meta">
+      <div class="day-focus-label">Primary Muscles</div>
+      <div class="day-muscles">Lats · Mid-Back<br>Biceps · Lower Back</div>
+    </div>
+  </div>
+
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">🎯 Session Goal</div>
+      <p>Build a wide, thick back. Heavy compound rows and pull-ups first, then targeted isolation. Your back is your biggest asset for aesthetics.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">⏱ Rest Guidance</div>
+      <ul>
+        <li>Deadlift / rows — <b>2.5–3 min</b></li>
+        <li>Accessories — <b>90 sec</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">💡 Key Cue</div>
+      <p>On all rows and pull-ups, initiate the movement with your elbows — not your hands. This shifts stress from biceps to lats.</p>
+    </div>
+  </div>
+
+  <div class="section-heading">Main Lifts</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">01</td>
+        <td>
+          <div class="ex-name">Conventional Deadlift</div>
+          <div class="ex-note">Hip-width stance, neutral spine, bar stays over mid-foot. Push the floor away, don't pull the bar up.</div>
+        </td>
+        <td class="ex-sets tag-pull">3 × 4–5</td>
+        <td>
+          <div class="ex-muscle-primary">Full Back, Glutes, Hamstrings</div>
+          <div class="ex-muscle-secondary">Traps, Core, Forearms</div>
+        </td>
+        <td class="ex-rest">3 min</td>
+      </tr>
+      <tr>
+        <td class="ex-num">02</td>
+        <td>
+          <div class="ex-name">Barbell Bent-Over Row</div>
+          <div class="ex-note">Hinge to ~45°, chest up, drive elbows back not up. Bar to lower chest / navel.</div>
+        </td>
+        <td class="ex-sets tag-pull">4 × 5–6</td>
+        <td>
+          <div class="ex-muscle-primary">Mid-Back, Rhomboids</div>
+          <div class="ex-muscle-secondary">Lats, Biceps, Rear Delts</div>
+        </td>
+        <td class="ex-rest">2.5 min</td>
+      </tr>
+      <tr>
+        <td class="ex-num">03</td>
+        <td>
+          <div class="ex-name">Pull-Ups (or Lat Pulldown)</div>
+          <div class="ex-note">Use lat pulldown if you can't do 5+ pull-ups yet. Pull to upper chest, control the descent.</div>
+        </td>
+        <td class="ex-sets tag-pull">4 × 5–8</td>
+        <td>
+          <div class="ex-muscle-primary">Lats</div>
+          <div class="ex-muscle-secondary">Biceps, Rear Delts, Teres Major</div>
+        </td>
+        <td class="ex-rest">2.5 min</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-heading">Accessories</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">04</td>
+        <td>
+          <div class="ex-name">Barbell Curl</div>
+          <div class="ex-note">No elbow swing. Full range — stretch at bottom, squeeze at top. Tempo: 2 sec down.</div>
+        </td>
+        <td class="ex-sets tag-pull">3 × 8–10</td>
+        <td>
+          <div class="ex-muscle-primary">Biceps</div>
+          <div class="ex-muscle-secondary">Brachialis, Forearms</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">05</td>
+        <td>
+          <div class="ex-name">Hyperextension (Back Extension)</div>
+          <div class="ex-note">Go to neutral spine at top — don't hyperextend. Hold 1 sec at the top.</div>
+        </td>
+        <td class="ex-sets tag-pull">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Lower Back (Erectors)</div>
+          <div class="ex-muscle-secondary">Glutes, Hamstrings</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">06</td>
+        <td>
+          <div class="ex-name">Wrist Curls (Dumbbell)</div>
+          <div class="ex-note">Forearms resting on bench. Curl just the wrist. Do both flexion and extension.</div>
+        </td>
+        <td class="ex-sets tag-pull">2 × 15–20</td>
+        <td>
+          <div class="ex-muscle-primary">Forearms (flexors + extensors)</div>
+          <div class="ex-muscle-secondary">—</div>
+        </td>
+        <td class="ex-rest">60 sec</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     DAY 3 — LEGS
+════════════════════════════════════════════════════ -->
+<section id="day3" class="tab-panel">
+
+  <div class="day-header">
+    <div class="day-title-wrap">
+      <div class="day-num">Day 03 · Wednesday</div>
+      <h2>Legs<br><span style="color:var(--leg)">Full Lower</span></h2>
+      <div class="day-type type-leg">🦵 Mixed Strength + Hypertrophy</div>
+    </div>
+    <div class="day-meta">
+      <div class="day-focus-label">Primary Muscles</div>
+      <div class="day-muscles">Quads · Hamstrings<br>Glutes · Calves</div>
+    </div>
+  </div>
+
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">🎯 Session Goal</div>
+      <p>Legs drive overall mass and testosterone production. Squat heavy, then hit each muscle with targeted work. Never skip this day.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">⏱ Rest Guidance</div>
+      <ul>
+        <li>Squat / RDL — <b>3 min</b></li>
+        <li>Leg press / isolations — <b>90–120 sec</b></li>
+        <li>Calves — <b>60 sec</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-heading">Main Lifts</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">01</td>
+        <td>
+          <div class="ex-name">Barbell Back Squat</div>
+          <div class="ex-note">Feet shoulder-width. Break at hips and knees together. Depth at or below parallel. Keep chest tall.</div>
+        </td>
+        <td class="ex-sets tag-leg">4 × 5–6</td>
+        <td>
+          <div class="ex-muscle-primary">Quads, Glutes</div>
+          <div class="ex-muscle-secondary">Hamstrings, Core, Lower Back</div>
+        </td>
+        <td class="ex-rest">3 min</td>
+      </tr>
+      <tr>
+        <td class="ex-num">02</td>
+        <td>
+          <div class="ex-name">Romanian Deadlift (RDL)</div>
+          <div class="ex-note">Soft knee bend, hinge at hips, bar stays close to legs. Feel the hamstring stretch — that's the cue to go back up.</div>
+        </td>
+        <td class="ex-sets tag-leg">3 × 8–10</td>
+        <td>
+          <div class="ex-muscle-primary">Hamstrings, Glutes</div>
+          <div class="ex-muscle-secondary">Lower Back, Erectors</div>
+        </td>
+        <td class="ex-rest">2.5 min</td>
+      </tr>
+      <tr>
+        <td class="ex-num">03</td>
+        <td>
+          <div class="ex-name">Leg Press (Machine)</div>
+          <div class="ex-note">High + wide foot placement = more glutes. Low + narrow = more quads. Don't lock knees at top.</div>
+        </td>
+        <td class="ex-sets tag-leg">3 × 10–12</td>
+        <td>
+          <div class="ex-muscle-primary">Quads, Glutes</div>
+          <div class="ex-muscle-secondary">Hamstrings</div>
+        </td>
+        <td class="ex-rest">2 min</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-heading">Accessories</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">04</td>
+        <td>
+          <div class="ex-name">Leg Extension (Machine)</div>
+          <div class="ex-note">Pause 1 second at full extension. Slow 3-sec negative. Do NOT use momentum.</div>
+        </td>
+        <td class="ex-sets tag-leg">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Quads (isolation)</div>
+          <div class="ex-muscle-secondary">—</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">05</td>
+        <td>
+          <div class="ex-name">Lying Leg Curl (Machine)</div>
+          <div class="ex-note">Don't raise hips off pad. Full range — squeeze hard at peak contraction.</div>
+        </td>
+        <td class="ex-sets tag-leg">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Hamstrings (isolation)</div>
+          <div class="ex-muscle-secondary">—</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">06</td>
+        <td>
+          <div class="ex-name">Standing Calf Raise</div>
+          <div class="ex-note">Full stretch at bottom, full rise at top, 1-sec pause. Calves respond to slow, full ROM reps.</div>
+        </td>
+        <td class="ex-sets tag-leg">4 × 15–20</td>
+        <td>
+          <div class="ex-muscle-primary">Gastrocnemius, Soleus</div>
+          <div class="ex-muscle-secondary">—</div>
+        </td>
+        <td class="ex-rest">60 sec</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     DAY 4 — PUSH B (HYPERTROPHY)
+════════════════════════════════════════════════════ -->
+<section id="day4" class="tab-panel">
+
+  <div class="day-header">
+    <div class="day-title-wrap">
+      <div class="day-num">Day 04 · Thursday</div>
+      <h2>Push B<br><span style="color:var(--push)">Hypertrophy</span></h2>
+      <div class="day-type type-push">💧 Volume Focus</div>
+    </div>
+    <div class="day-meta">
+      <div class="day-focus-label">Primary Muscles</div>
+      <div class="day-muscles">Chest (all) · Shoulders<br>Triceps · Lower Chest</div>
+    </div>
+  </div>
+
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">🎯 Session Goal</div>
+      <p>Higher reps, moderate weight, maximum pump. Use cables and dumbbells for constant tension. Different angle emphasis vs Day 1.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">⏱ Rest Guidance</div>
+      <ul>
+        <li>All exercises — <b>60–90 sec</b></li>
+        <li>Goal = density and stretch</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">🛡 Injury Prevention</div>
+      <p>Face pulls today protect your rotator cuff from the heavy pressing earlier in the week. Don't skip them.</p>
+    </div>
+  </div>
+
+  <div class="section-heading">Main Lifts</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">01</td>
+        <td>
+          <div class="ex-name">Weighted Dips (Chest Focus)</div>
+          <div class="ex-note">Lean slightly forward to hit chest more. Lower until upper arms are parallel to floor. Use bodyweight if new.</div>
+        </td>
+        <td class="ex-sets tag-push">4 × 8–10</td>
+        <td>
+          <div class="ex-muscle-primary">Lower Chest</div>
+          <div class="ex-muscle-secondary">Triceps, Front Delts</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">02</td>
+        <td>
+          <div class="ex-name">Flat Dumbbell Bench Press</div>
+          <div class="ex-note">Full stretch at bottom (deeper than barbell allows). Squeeze chest hard at top.</div>
+        </td>
+        <td class="ex-sets tag-push">4 × 10–12</td>
+        <td>
+          <div class="ex-muscle-primary">Mid Chest</div>
+          <div class="ex-muscle-secondary">Front Delts, Triceps</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">03</td>
+        <td>
+          <div class="ex-name">Cable Chest Fly (Mid / Low to High)</div>
+          <div class="ex-note">Slight elbow bend only. Feel the chest stretch on every rep. Constant cable tension is key.</div>
+        </td>
+        <td class="ex-sets tag-push">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Inner + Upper Chest (stretch)</div>
+          <div class="ex-muscle-secondary">Front Delts</div>
+        </td>
+        <td class="ex-rest">75 sec</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-heading">Accessories</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">04</td>
+        <td>
+          <div class="ex-name">Arnold Press (Seated Dumbbell)</div>
+          <div class="ex-note">Slow rotation — start palms facing you, rotate out as you press. Hits all three delt heads.</div>
+        </td>
+        <td class="ex-sets tag-push">3 × 10–12</td>
+        <td>
+          <div class="ex-muscle-primary">All 3 Deltoid Heads</div>
+          <div class="ex-muscle-secondary">Triceps, Traps</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">05</td>
+        <td>
+          <div class="ex-name">Face Pulls (Cable — Rope)</div>
+          <div class="ex-note">Pull to forehead height. Externally rotate at the end (thumbs pointing back). High cable setting.</div>
+        </td>
+        <td class="ex-sets tag-push">3 × 15–20</td>
+        <td>
+          <div class="ex-muscle-primary">Rear Delts, Rotator Cuff</div>
+          <div class="ex-muscle-secondary">Traps, External Rotators</div>
+        </td>
+        <td class="ex-rest">60 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">06</td>
+        <td>
+          <div class="ex-name">Overhead Tricep Extension (DB)</div>
+          <div class="ex-note">Keep upper arms vertical. Slow 3-sec lowering. Long head stretch is the goal here.</div>
+        </td>
+        <td class="ex-sets tag-push">3 × 10–12</td>
+        <td>
+          <div class="ex-muscle-primary">Triceps (long head)</div>
+          <div class="ex-muscle-secondary">—</div>
+        </td>
+        <td class="ex-rest">75 sec</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     DAY 5 — PULL B (HYPERTROPHY)
+════════════════════════════════════════════════════ -->
+<section id="day5" class="tab-panel">
+
+  <div class="day-header">
+    <div class="day-title-wrap">
+      <div class="day-num">Day 05 · Friday</div>
+      <h2>Pull B<br><span style="color:var(--pull)">Hypertrophy</span></h2>
+      <div class="day-type type-pull">💧 Volume Focus</div>
+    </div>
+    <div class="day-meta">
+      <div class="day-focus-label">Primary Muscles</div>
+      <div class="day-muscles">Lats (width) · Mid-Back<br>Biceps · Rear Delts · Forearms</div>
+    </div>
+  </div>
+
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">🎯 Session Goal</div>
+      <p>Width and thickness. High reps, controlled tempo, maximum mind-muscle connection on lats and rear delts. End week strong.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">⏱ Rest Guidance</div>
+      <ul>
+        <li>Compound pulls — <b>90–120 sec</b></li>
+        <li>Isolations — <b>60–75 sec</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-heading">Main Lifts</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">01</td>
+        <td>
+          <div class="ex-name">Wide-Grip Lat Pulldown</div>
+          <div class="ex-note">Lean back slightly, pull bar to upper chest. Think "elbows to back pockets."</div>
+        </td>
+        <td class="ex-sets tag-pull">4 × 10–12</td>
+        <td>
+          <div class="ex-muscle-primary">Lats (width)</div>
+          <div class="ex-muscle-secondary">Biceps, Rear Delts</div>
+        </td>
+        <td class="ex-rest">2 min</td>
+      </tr>
+      <tr>
+        <td class="ex-num">02</td>
+        <td>
+          <div class="ex-name">Seated Cable Row (Close Grip)</div>
+          <div class="ex-note">Chest tall, pull to navel. Squeeze shoulder blades together for 1 sec at peak.</div>
+        </td>
+        <td class="ex-sets tag-pull">4 × 10–12</td>
+        <td>
+          <div class="ex-muscle-primary">Mid-Back, Rhomboids</div>
+          <div class="ex-muscle-secondary">Lats, Biceps</div>
+        </td>
+        <td class="ex-rest">90 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">03</td>
+        <td>
+          <div class="ex-name">Cable Straight-Arm Pulldown</div>
+          <div class="ex-note">Arms stay straight throughout. Hinge slightly forward. Pure lat isolation — feel each rep.</div>
+        </td>
+        <td class="ex-sets tag-pull">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Lats (isolation)</div>
+          <div class="ex-muscle-secondary">Teres Major</div>
+        </td>
+        <td class="ex-rest">75 sec</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-heading">Accessories</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Primary / Secondary</th><th>Rest</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ex-num">04</td>
+        <td>
+          <div class="ex-name">Rear Delt Fly (Dumbbell, Bent Over)</div>
+          <div class="ex-note">Hinge to ~45°, arms at shoulder height, slight elbow bend. Don't swing. Control both ways.</div>
+        </td>
+        <td class="ex-sets tag-pull">3 × 15–20</td>
+        <td>
+          <div class="ex-muscle-primary">Rear Delts</div>
+          <div class="ex-muscle-secondary">Rhomboids, Traps</div>
+        </td>
+        <td class="ex-rest">60 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">05</td>
+        <td>
+          <div class="ex-name">Hammer Curl (Dumbbell)</div>
+          <div class="ex-note">Neutral grip (thumbs up). No swinging. Builds both biceps AND forearm thickness.</div>
+        </td>
+        <td class="ex-sets tag-pull">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Brachialis, Biceps</div>
+          <div class="ex-muscle-secondary">Forearms (brachioradialis)</div>
+        </td>
+        <td class="ex-rest">75 sec</td>
+      </tr>
+      <tr>
+        <td class="ex-num">06</td>
+        <td>
+          <div class="ex-name">Incline Dumbbell Curl</div>
+          <div class="ex-note">Set bench to 60°. Long head gets maximum stretch in this position. Don't use momentum.</div>
+        </td>
+        <td class="ex-sets tag-pull">3 × 12–15</td>
+        <td>
+          <div class="ex-muscle-primary">Biceps (long head / peak)</div>
+          <div class="ex-muscle-secondary">Forearms</div>
+        </td>
+        <td class="ex-rest">60 sec</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     DAY 6 — REST / ACTIVE RECOVERY
+════════════════════════════════════════════════════ -->
+<section id="day6" class="tab-panel">
+
+  <div class="day-header">
+    <div class="day-title-wrap">
+      <div class="day-num">Day 06 · Saturday</div>
+      <h2>Rest &<br><span style="color:var(--yellow)">Recovery</span></h2>
+      <div class="day-type type-rest">🛌 Active Recovery</div>
+    </div>
+  </div>
+
+  <div class="rest-panel">
+    <div class="rest-icon">🌿</div>
+    <h3>You Grow On Rest Days</h3>
+    <p>Muscle is built during recovery, not during training. Protect this day. If you feel good, do light active recovery — not an extra workout.</p>
+    <p><b>Light options (optional):</b> 20-min walk · Swimming · Yoga / mobility · Foam rolling · Light stretching</p>
+    <p><b>What to avoid:</b> Heavy cardio · Extra lifting · Poor sleep</p>
+  </div>
+
+  <div style="margin-top: 28px;">
+    <div class="cards-row">
+      <div class="card">
+        <div class="card-label">🧘 Mobility Work (Optional)</div>
+        <ul>
+          <li>Hip flexor stretch — 2 × 60 sec</li>
+          <li>Lat + chest doorway stretch</li>
+          <li>Shoulder internal rotation work</li>
+          <li>Hamstring + calf stretch</li>
+          <li>Thoracic spine foam roll</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">😴 Recovery Checklist</div>
+        <ul>
+          <li>Sleep <b>8–9 hours</b> tonight</li>
+          <li>Eat at or slightly above maintenance</li>
+          <li>Drink <b>3–4L water</b></li>
+          <li>No alcohol — kills testosterone + recovery</li>
+          <li>Prep meals for next week</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     GUIDE — SCHEDULE + PROGRESSION + DIET
+════════════════════════════════════════════════════ -->
+<section id="guide" class="tab-panel">
+
+  <!-- SCHEDULE -->
+  <div style="margin-bottom: 56px;">
+    <div class="panel-title">Weekly Schedule</div>
+
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Day</th><th>Session</th><th>Type</th><th>Focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="day-label">Monday</div></td>
+          <td><b>Push A</b> — Flat Bench, OHP, Incline DB</td>
+          <td><span class="sched-badge sb-push">⚡ Heavy</span></td>
+          <td>Chest · Front Delts · Triceps · Core</td>
+        </tr>
+        <tr>
+          <td><div class="day-label">Tuesday</div></td>
+          <td><b>Pull A</b> — Deadlift, Bent Row, Pull-Ups</td>
+          <td><span class="sched-badge sb-pull">⚡ Heavy</span></td>
+          <td>Back · Biceps · Lower Back · Forearms</td>
+        </tr>
+        <tr>
+          <td><div class="day-label">Wednesday</div></td>
+          <td><b>Legs</b> — Squat, RDL, Leg Press</td>
+          <td><span class="sched-badge sb-leg">🦵 Mixed</span></td>
+          <td>Quads · Hamstrings · Glutes · Calves</td>
+        </tr>
+        <tr>
+          <td><div class="day-label">Thursday</div></td>
+          <td><b>Push B</b> — Dips, DB Bench, Cable Fly</td>
+          <td><span class="sched-badge sb-push">💧 Hypertrophy</span></td>
+          <td>All Chest · Delts · Triceps · Rotator Cuff</td>
+        </tr>
+        <tr>
+          <td><div class="day-label">Friday</div></td>
+          <td><b>Pull B</b> — Pulldown, Cable Row, Straight-Arm</td>
+          <td><span class="sched-badge sb-pull">💧 Hypertrophy</span></td>
+          <td>Lats · Rear Delts · Biceps · Forearms</td>
+        </tr>
+        <tr>
+          <td><div class="day-label">Saturday</div></td>
+          <td><b>Rest / Active Recovery</b></td>
+          <td><span class="sched-badge sb-rest">🛌 Rest</span></td>
+          <td>Walk · Stretch · Sleep · Eat</td>
+        </tr>
+        <tr>
+          <td><div class="day-label">Sunday</div></td>
+          <td><b>Full Rest</b></td>
+          <td><span class="sched-badge sb-rest">🛌 Rest</span></td>
+          <td>Full recovery — do nothing</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MUSCLE COVERAGE -->
+  <div style="margin-bottom: 56px;">
+    <div class="panel-title">Full Muscle Coverage</div>
+    <div class="coverage-grid">
+      <span class="muscle-pill"><span class="dot" style="background:var(--push)"></span>Mid Chest (Bench)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--push)"></span>Upper Chest (Incline)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--push)"></span>Lower Chest (Dips)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--push)"></span>Front Delts (OHP)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--push)"></span>Lateral Delts (Raises)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--pull)"></span>Rear Delts (Fly + Face Pulls)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--pull)"></span>Lats (Pull-ups + Pulldowns)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--pull)"></span>Mid-Back (Rows)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--pull)"></span>Lower Back (Hyperextension)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--pull)"></span>Biceps (Curl + Pulldown)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--push)"></span>Triceps (Pushdown + Ext.)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--pull)"></span>Forearms (Hammer + Wrist Curl)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--leg)"></span>Quads (Squat + Extension)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--leg)"></span>Hamstrings (RDL + Curl)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--leg)"></span>Glutes (Squat + RDL)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--leg)"></span>Calves (Calf Raise)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--push)"></span>Core / Abs (Ab Wheel + Plank)</span>
+      <span class="muscle-pill"><span class="dot" style="background:var(--pull)"></span>Rotator Cuff (Face Pulls)</span>
+    </div>
+  </div>
+
+  <!-- PROGRESSION -->
+  <div style="margin-bottom: 56px;">
+    <div class="panel-title">Progression Guide</div>
+    <ol class="prog-list">
+      <li class="prog-item">
+        <div class="prog-num">01</div>
+        <div>
+          <div class="prog-title">The 2-Rep Rule (Your Weekly Target)</div>
+          <div class="prog-desc">When you can hit the <em>top</em> of your rep range on all sets (e.g. all 4 sets of 6 reps on bench), add 2.5 kg next session. Never add weight if form breaks. This is your #1 rule.</div>
+        </div>
+      </li>
+      <li class="prog-item">
+        <div class="prog-num">02</div>
+        <div>
+          <div class="prog-title">Track Every Single Session</div>
+          <div class="prog-desc">Log your weights and reps every day — phone notes, a small notebook, anything. You cannot progress what you don't measure. Without tracking, you will plateau within 4 weeks.</div>
+        </div>
+      </li>
+      <li class="prog-item">
+        <div class="prog-num">03</div>
+        <div>
+          <div class="prog-title">Compound Lifts Are Priority</div>
+          <div class="prog-desc">Get stronger on Bench, OHP, Pull-Ups, Row, and Squat. Everything else follows. Accessory weights can stay the same for weeks — compound strength is what builds mass.</div>
+        </div>
+      </li>
+      <li class="prog-item">
+        <div class="prog-num">04</div>
+        <div>
+          <div class="prog-title">Deload Every 4–6 Weeks</div>
+          <div class="prog-desc">Drop all weights by 40–50% for one full week. Same exercises, same reps, very light load. Your joints and nervous system need this. You come back stronger — every time.</div>
+        </div>
+      </li>
+      <li class="prog-item">
+        <div class="prog-num">05</div>
+        <div>
+          <div class="prog-title">Commit for at Least 12 Weeks</div>
+          <div class="prog-desc">Don't change the program every few weeks. Newbie gains are the best gains of your life. Run this program for 12 weeks before even thinking about changing anything.</div>
+        </div>
+      </li>
+      <li class="prog-item">
+        <div class="prog-num">06</div>
+        <div>
+          <div class="prog-title">Sleep is Your #1 Supplement</div>
+          <div class="prog-desc">You build muscle while sleeping — not while training. Get 8–9 hours every night. No supplement will ever replace sleep. Poor sleep = poor recovery = no gains, no matter how hard you train.</div>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- DIET -->
+  <div style="margin-bottom: 56px;">
+    <div class="panel-title">Diet for Lean Bulk</div>
+
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;">Daily Target — 60 kg bodyweight</div>
+
+    <div class="macro-grid">
+      <div class="macro-card">
+        <div class="macro-val" style="color:#e87c3e">2,800</div>
+        <div class="macro-unit">Calories / day</div>
+      </div>
+      <div class="macro-card">
+        <div class="macro-val" style="color:#e84e4e">150g</div>
+        <div class="macro-unit">Protein (2.5g/kg)</div>
+      </div>
+      <div class="macro-card">
+        <div class="macro-val" style="color:var(--yellow)">350g</div>
+        <div class="macro-unit">Carbs</div>
+      </div>
+      <div class="macro-card">
+        <div class="macro-val" style="color:#5cbf7a">65g</div>
+        <div class="macro-unit">Fats</div>
+      </div>
+    </div>
+
+    <div class="cards-row">
+      <div class="card">
+        <div class="card-label">🍗 Best Protein Sources</div>
+        <ul>
+          <li>Chicken breast / thigh</li>
+          <li>Whole eggs + egg whites</li>
+          <li>Greek yogurt</li>
+          <li>Cottage cheese (pre-bed)</li>
+          <li>Tuna / Salmon</li>
+          <li>Whey protein shake (1–2/day)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">🌾 Best Carb Sources</div>
+        <ul>
+          <li>White / brown rice</li>
+          <li>Oats (pre-workout meal)</li>
+          <li>Sweet potato</li>
+          <li>Whole grain bread</li>
+          <li>Bananas (pre/post workout)</li>
+          <li>Pasta (post workout)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">⏰ Meal Timing</div>
+        <ul>
+          <li><b>Pre-workout (1–2h):</b> Oats + 3 eggs</li>
+          <li><b>Post-workout (within 1h):</b> Protein shake + banana</li>
+          <li><b>Before bed:</b> Cottage cheese or casein</li>
+          <li>Eat 4–5 meals per day total</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">💧 Hydration</div>
+        <ul>
+          <li>Drink <b>3–4 litres</b> of water daily</li>
+          <li>More on training days</li>
+          <li>Add electrolytes if sweating a lot</li>
+          <li>Limit alcohol entirely on this program</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- /container -->
+
+<!-- ═══ THEME TOGGLE ════════════════════════════════════ -->
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark / light mode">
+  <div class="toggle-icon" id="toggleIcon">☀️</div>
+  <span id="toggleLabel">Light</span>
+</button>
+
+<script>
+function go(id, color, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active-push','active-pull','active-leg','active-rest');
+  });
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active-' + color);
+}
+
+// ── THEME ──────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.classList.toggle('dark');
+  document.getElementById('toggleIcon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('toggleLabel').textContent = isDark ? 'Dark' : 'Light';
+  try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e) {}
+}
+
+// Init: load saved preference, default to light
+(function() {
+  let saved = 'light';
+  try { saved = localStorage.getItem('theme') || 'light'; } catch(e) {}
+  if (saved === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('toggleIcon').textContent = '🌙';
+    document.getElementById('toggleLabel').textContent = 'Dark';
+  }
+})();
+
+// Activate first tab on load
+document.querySelector('[data-tab="day1"]').classList.add('active-push');
+</script>
+</body>
+</html>
